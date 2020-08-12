@@ -1,9 +1,17 @@
 [package]
-name = "rustyOS"
+name = "rusty_os"
 version = "0.1.0"
 authors = ["morimolymoly <morimolymoly@gmail.com>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+
 [dependencies]
+rlibc = "1.0.0"
+bootloader = "0.9.8"
