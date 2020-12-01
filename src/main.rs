@@ -14,7 +14,13 @@ pub extern "C" fn _start() -> ! {
     println!("Hello World{}", "!");
 
     rusty_os::init(); // init routine
+
+    /*
+    unsafe {
+        *(0xdeafbeef as *mut u64) = 1000;
+    };
     x86_64::instructions::interrupts::int3();
+    */
 
     #[cfg(test)]
     test_main();
