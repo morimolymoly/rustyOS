@@ -25,19 +25,19 @@ pub extern "C" fn _start() -> ! {
     #[cfg(test)]
     test_main();
 
-    loop{}
+    rusty_os::hlt_loop();
 }
 
 #[cfg(not(test))]
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     println!("{}", _info);
-    loop{}
+    rusty_os::hlt_loop();
 }
 
 #[cfg(test)]
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     rusty_os::test_panic_handler(_info);
-    loop{}
+    rusty_os::hlt_loop();
 }
