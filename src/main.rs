@@ -15,12 +15,9 @@ pub extern "C" fn _start() -> ! {
 
     rusty_os::init(); // init routine
 
-    /*
-    unsafe {
-        *(0xdeafbeef as *mut u64) = 1000;
-    };
-    x86_64::instructions::interrupts::int3();
-    */
+    use x86_64::registers::control::Cr3;
+    let (level4_page_table, _) = Cr3::read();
+    println!("level4 page table is here {:?}", level4_page_table.start_address());
 
     #[cfg(test)]
     test_main();
