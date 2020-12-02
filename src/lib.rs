@@ -11,6 +11,7 @@ pub mod serial;
 pub mod vga_buffer;
 pub mod interrupts;
 pub mod gdt;
+pub mod memory;
 extern crate rlibc;
 
 pub fn init() {
