@@ -1,10 +1,16 @@
 use x86_64::{
     structures::paging::PageTable,
+    structures::paging::OffsetPageTable,
     VirtAddr,
     PhysAddr,
 };
 
-pub unsafe fn active_level_4_table(phy_mem_offset: VirtAddr)
+pub unsafe fn init(phy_mem_offset: VirtAddr) -> OffsetPageTable<'static> {
+    let level_4_table = active_level_4_table(phy_mem_offset);
+    OffsetPageTable::new(level_4_table, phy_mem_offset)
+}
+
+unsafe fn active_level_4_table(phy_mem_offset: VirtAddr)
     -> &'static mut PageTable
 {
     use x86_64::registers::control::Cr3;
@@ -18,6 +24,7 @@ pub unsafe fn active_level_4_table(phy_mem_offset: VirtAddr)
     &mut *page_table_ptr
 }
 
+/*
 pub unsafe fn translate_addr(addr: VirtAddr, phy_mem_offset: VirtAddr)
     -> Option<PhysAddr>
 {
@@ -55,3 +62,4 @@ fn translate_addr_inner(addr: VirtAddr, phy_mem_offset: VirtAddr)
 
     Some(frame.start_address() + u64::from(addr.page_offset()))
 }
+*/
