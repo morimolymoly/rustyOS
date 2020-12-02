@@ -9,9 +9,13 @@ extern crate rlibc;
 mod vga_buffer;
 mod serial;
 
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
+use bootloader::{BootInfo, entry_point};
+
+entry_point!(kernel_main);
+
+fn kernel_main(boot_info: &'static BootInfo) -> ! {
     println!("Hello World{}", "!");
+    println!("bootinfo {:#?}", boot_info);
 
     rusty_os::init(); // init routine
 
