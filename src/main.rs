@@ -15,34 +15,20 @@ entry_point!(kernel_main);
 
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
     use rusty_os::memory;
-    use x86_64::{VirtAddr, structures::paging::MapperAllSizes};
+    use x86_64::{structures::paging::{Page, Size4KiB}, VirtAddr};
 
     println!("Hello World{}", "!");
     rusty_os::init(); // init routine
 
-    use x86_64::registers::control::Cr3;
-    let (level4_page_table, _) = Cr3::read();
-    println!("level4 page table is here {:?}", level4_page_table.start_address());
-
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
-    let mapper = unsafe{ memory::init(phys_mem_offset) };
+    let mut mapper = unsafe { memory::init(phys_mem_offset) };
+    let mut frame_allocator = unsafe{ memory::BootInfoFrameAllocator::init(&boot_info.memory_map) };
 
-    let addresses = [
-        // the identity-mapped vga buffer page
-        0xb8000,
-        // some code page
-        0x201008,
-        // some stack page
-        0x0100_0020_1a10,
-        // virtual address mapped to physical address 0
-        boot_info.physical_memory_offset,
-    ];
+    let page: Page<Size4KiB> = Page::containing_address(VirtAddr::new(0));
+    memory::create_example_mapping(page, &mut mapper, &mut frame_allocator);
 
-    for &address in &addresses {
-        let virt = VirtAddr::new(address);
-        let phys = mapper.translate_addr(virt);
-        println!("{:?} -> {:?}", virt, phys);
-    }
+    let page_ptr: *mut u64 = page.start_address().as_mut_ptr();
+    unsafe { page_ptr.offset(400).write_volatile(0x_f021_f077_f065_f04e)};
 
     #[cfg(test)]
     test_main();
