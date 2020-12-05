@@ -67,12 +67,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rlibc"
-version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fc874b127765f014d792f16763a81245ab80500e2ad921ed4ee9e82481ee08fe"
-
-[[package]]
 name = "rusty_os"
 version = "0.1.0"
 dependencies = [
@@ -81,7 +75,6 @@ dependencies = [
  "linked_list_allocator",
  "pc-keyboard",
  "pic8259_simple",
- "rlibc",
  "spin",
  "uart_16550",
  "volatile",

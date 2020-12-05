@@ -6,7 +6,6 @@
 
 use core::panic::PanicInfo;
 use rusty_os::println;
-extern crate rlibc;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {

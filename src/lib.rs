@@ -17,7 +17,6 @@ pub mod gdt;
 pub mod memory;
 pub mod allocator;
 
-extern crate rlibc;
 extern crate alloc;
 
 pub fn init() {

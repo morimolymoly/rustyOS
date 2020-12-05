@@ -5,7 +5,6 @@
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
-extern crate rlibc;
 mod vga_buffer;
 mod serial;
 
