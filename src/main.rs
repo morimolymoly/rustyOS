@@ -9,6 +9,9 @@ extern crate rlibc;
 mod vga_buffer;
 mod serial;
 
+extern crate alloc;
+use alloc::boxed::Box;
+
 use bootloader::{BootInfo, entry_point};
 
 entry_point!(kernel_main);
@@ -16,6 +19,7 @@ entry_point!(kernel_main);
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
     use rusty_os::memory;
     use x86_64::{structures::paging::{Page, Size4KiB}, VirtAddr};
+    use rusty_os::allocator;
 
     println!("Hello World{}", "!");
     rusty_os::init(); // init routine
@@ -29,6 +33,12 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
 
     let page_ptr: *mut u64 = page.start_address().as_mut_ptr();
     unsafe { page_ptr.offset(400).write_volatile(0x_f021_f077_f065_f04e)};
+
+    allocator::init_heap(&mut mapper, &mut frame_allocator)
+        .expect("heap init failed!");
+
+    let a = Box::new(10);
+
 
     #[cfg(test)]
     test_main();
